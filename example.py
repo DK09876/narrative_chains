@@ -1,5 +1,6 @@
 import chains
 from pprint import pprint
+import json
 
 
 def parse_test_instance(story):
