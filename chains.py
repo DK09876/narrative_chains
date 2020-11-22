@@ -156,6 +156,7 @@ def protagonist(story, heuristic=2):
 # Heuristic 1: first entity
 def protagonist_heuristic_one(story):
     """Story is parsed by spacy"""
+    print(type(story.ents[0].text))
     return [(story.ents[0].text, 1)]
 
 # Heuristic 2: most frequently mentioned entity

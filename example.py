@@ -36,7 +36,7 @@ with open("all.json") as fp:
     table = chains.ProbabilityTable(json.load(fp))
 
 
-#this is my cloze test  (system passes has 45% success rate approx.)
+#this is my cloze test  (system passes has 33% success rate approx.)
 # load testing data
 test = chains.load_data("val.csv")
 correct=0
@@ -46,20 +46,29 @@ for t in test:
     prot=chains.protagonist(one)
     prot2=chains.protagonist(two)
 
-    #in case prot is not found
+    #in case prot is not found with heur2
     try:
         testing=prot[1]
         testing2=prot2[1]
     except TypeError as ex:
         total+=1
         continue
+        # prot=chains.protagonist(one,1)
+        # prot2=chains.protagonist(two,1)
+
+    #this is me attemping to make code better but we returned entity.text
+    # if len(prot) == 1:
+    #     prot=[tuple[0] for tuple in prot]
+    #     prot2=[tuple[0] for tuple in prot2]
+    #     one_deps = chains.coreferring_pairs(one,prot)
+    #     two_deps = chains.coreferring_pairs(two,prot2)
 
     one_deps = chains.coreferring_pairs(one,prot[1].root)
     two_deps = chains.coreferring_pairs(two,prot2[1].root)
     
     #in case my system cant parse the dependecy pairs properly (fail the line and move on)
     if len(one_deps)==0 or len (two_deps)==0:
-        total+=19
+        total+=1
         continue
     
     oneoption = one_deps[-1]
