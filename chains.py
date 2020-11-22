@@ -184,7 +184,7 @@ class ProbabilityTable:
             for story in self.counter:
                 for entity in self.counter[story]:
                     v = self.counter[story][entity]
-                    if (verb, dependency) in v and (verb2, dependency2) in v:
+                    if [verb, dependency] in v and [verb2, dependency2] in v:
                         ctr +=1
             self.cache[query] = ctr
         return self.cache[query]
@@ -196,16 +196,16 @@ class ProbabilityTable:
             ctr = 0
             for story in self.counter:
                 for entity in self.counter[story]:
-                    if (verb, dependency) in self.counter[story][entity]:
+                    if [verb, dependency] in self.counter[story][entity]:
                         ctr += 1
             self.cache[query] = ctr
         return self.cache[query]
 
     def pmi(self, verb, dependency, verb2, dependency2):
         n = len(self.counter) + PLUS_ONE_SMOOTHING
-        prob_a_and_b = self.bigram(verb, dependency, verb2, dependency2)+PLUS_ONE_SMOOTHING/n
-        prob_a = self.unigram(verb, dependency)+PLUS_ONE_SMOOTHING/n
-        prob_b = self.unigram(verb2, dependency2)+PLUS_ONE_SMOOTHING/n
+        prob_a_and_b = (self.bigram(verb, dependency, verb2, dependency2)+PLUS_ONE_SMOOTHING)/n
+        prob_a = (self.unigram(verb, dependency)+PLUS_ONE_SMOOTHING)/n
+        prob_b = (self.unigram(verb2, dependency2)+PLUS_ONE_SMOOTHING)/n
         #return math.log(prob_a_and_b/(prob_a*prob_b))
         return math.log(prob_a_and_b) - (math.log(prob_a) + math.log(prob_b))
 
