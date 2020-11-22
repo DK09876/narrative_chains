@@ -21,16 +21,55 @@ def story_answer(story):
 #data, table = chains.process_corpus("train.csv", 100)
 #print(table.pmi("move", "nsubj", "move", "nsubj"))
 
+#function to go through the dependency pairs and find the highest "amount of information" given the first option/ second option
+def gothroughdeps(deps,option):
+    result=[]
+    for x in deps:
+        if x[0] != option[0]:
+            information = table.pmi(x[0],x[1],option[0],option[1])
+            result.append(information)
+    return result
+
 # load the pre-built model
 with open("all.json") as fp:
     table = chains.ProbabilityTable(json.load(fp))
 
 # load testing data
-test = chains.load_data("val.csv")
+test = chains.load_data("oop.csv")
 for t in test:
     one, two = parse_test_instance(t)
-    one_deps = chains.extract_dependency_pairs(one)
-    pprint(one[2:])
-    pprint(two[2:])
-    # logic to choose between one and two
-    pprint("answer:"+ str(story_answer(t)))
+    # one_deps = chains.extract_dependency_pairs(one)
+    prot=chains.protagonist(one)
+    prot2=chains.protagonist(two)
+    one_deps = chains.coreferring_pairs(one,prot[1].root)
+    print (one_deps)
+    two_deps = chains.coreferring_pairs(two,prot2[1].root)
+    oneoption = one_deps[-1]
+    twooption = two_deps[-1]
+    oneresult=gothroughdeps(one_deps,oneoption)
+    tworesult=gothroughdeps(two_deps,twooption)
+    print (oneresult)
+    
+    ''' my logic is that i get X amount of info by relating each of the verbs with the optional verb
+        and to choose between option one and two i just need to find the average of how much information I get from each
+        option and choose the option that gives more information
+    '''
+    # got this code from     https://careerkarma.com/blog/python-average/#:~:text=We%20can%20find%20the%20average,the%20Python%20mean()%20function.
+    # average = sum(orders) / len(orders)
+    #oneaverage = sum(oneresult) / len(oneresult)
+    #twoaverage = sum(tworesult) / len(tworesult)
+
+    # if oneaverage>twoaverage:
+    #     result = 1
+    # else:
+    #     result = 2
+
+    # print (result)
+   # pprint(one[2:])
+    #pprint(two[2:])
+    
+    #pprint("answer:"+ str(story_answer(t)))
+
+
+
+

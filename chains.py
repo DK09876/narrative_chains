@@ -141,7 +141,7 @@ def coreferring_pairs(parse, token):
     res = dereference_pair(token, parse.story)
     if res is None:
         return []
-    return extracted[res]
+    return extracted[1][res]
 
 # Protagonist detection
 def protagonist(story, heuristic=2):
@@ -206,8 +206,8 @@ class ProbabilityTable:
         prob_a_and_b = self.bigram(verb, dependency, verb2, dependency2)+PLUS_ONE_SMOOTHING/n
         prob_a = self.unigram(verb, dependency)+PLUS_ONE_SMOOTHING/n
         prob_b = self.unigram(verb2, dependency2)+PLUS_ONE_SMOOTHING/n
-        return math.log(prob_a_and_b/(prob_a*prob_b))
-        #math.log(prob_a_and_b) - (math.log(prob_a) + math.log(prob_b))
+        #return math.log(prob_a_and_b/(prob_a*prob_b))
+        return math.log(prob_a_and_b) - (math.log(prob_a) + math.log(prob_b))
 
     def histo(self, verb, dependency):
         """Return cooccurrence counts for all verb/dependency pairs for a given verb/dependency"""
