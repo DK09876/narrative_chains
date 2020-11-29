@@ -6,3 +6,6 @@
   load_data has sample parameter to finetune the trainingset/testset.
 
   Thank you :D
+
+
+(Sorry the writeup is a .docx file so you hafto download it)
